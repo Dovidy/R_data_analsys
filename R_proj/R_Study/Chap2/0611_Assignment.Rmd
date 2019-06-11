@@ -1,0 +1,42 @@
+---
+title: "0611_wordcloud_과제"
+date: '2019-06-11'
+author: "임도균"
+output: html_document
+---
+
+### 2019-06-11 word cloud 과제
+#### 서울시 응답소 2015년 데이터에서 키워드를 찾아 word cloud를 만든다
+#### 조건은 다음과 같다.
+1. 제거할 단어를 저장한 gsub 파일을 만든다.
+2. stringr 패키지를 사용한다.
+3. R Markdown으로 보고서를 제작, 제출한다.
+
+
+
+### 1. R Set Up
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rJava)
+library(KoNLP)
+library(wordcloud)
+library(stringr)
+library(RColorBrewer)
+useSejongDic()
+```
+
+### 2. 
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

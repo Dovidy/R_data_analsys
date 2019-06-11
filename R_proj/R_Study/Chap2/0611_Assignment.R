@@ -5,6 +5,7 @@ install.packages('KoNLP')
 install.packages('wordcloud')
 install.packages('stringr')
 
+library(rJava)
 library(KoNLP)
 library(wordcloud)
 library(stringr)
@@ -14,17 +15,21 @@ useSejongDic()
 
 # Read Data
 
-for(i in 1:12) {
-  data_txt <- readLines(sprintf('data/서울시 응답소_2015년전체/응답소_2015_%02d.txt', i)) 
+datas <- readLines('data/서울시 응답소_2015년전체/응답소_2015_01.txt')
+
+i <- 1
+for(i in 2:12) {
+  datas <- c(datas, readLines(sprintf('data/서울시 응답소_2015년전체/응답소_2015_%02d.txt', i)))
 }
 
-words <- sapply(data_txt, extractNoun, USE.NAMES = F)
+words <- sapply(datas, extractNoun, USE.NAMES = F)
 words
+
 head(unlist(words), 30) # 처음 30개 데이터 보여주기
 data <- unlist(words)
 
 # Data Processing
-gsub_txt <- readLines('data/서울시 응답소_2015년전체/gsub_data.txt')
+gsub_txt <- readLines('data/gsub_data.txt')
 i <- 1
 for(i in 1:length(gsub_txt)) {
   data <- gsub((gsub_txt[i]), '', data)
@@ -36,8 +41,8 @@ data <- gsub(' ', '', data)
 data <- gsub('"\n', '', data)
   
 
-write(unlist(data), 'data/서울시 응답소_2015년전체/seoul_2.txt') # remove space/crlf
-rev <- read.table('data/서울시 응답소_2015년전체/seoul_2.txt')
+write(unlist(data), 'data/seoul_2.txt') # remove space/crlf
+rev <- read.table('data/seoul_2.txt')
 nrow(rev) #3640 #3455 #3400
 
 #
