@@ -17,6 +17,7 @@ output: html_document
 ### 1. R Set Up
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+setwd('C:\\SmartData\\R_data_analsys\\R_proj\\R_Study')
 library(rJava)
 library(KoNLP)
 library(wordcloud)
@@ -25,18 +26,45 @@ library(RColorBrewer)
 useSejongDic()
 ```
 
-### 2. 
+### 2. 데이터 입력
 
-```{r cars}
-summary(cars)
+```{r datas}
+datas <- readLines('data/서울시 응답소_2015년전체/응답소_2015_01.txt')
+i <- 1
+for(i in 2:12) {
+  datas <- c(datas, readLines(sprintf('/data/서울시 응답소_2015년전체/응답소_2015_%02d.txt', i)))
+}
 ```
 
-## Including Plots
+### 데이터 처리
 
-You can also embed plots, for example:
+```{r rev, echo=FALSE}
+words <- sapply(datas, extractNoun, USE.NAMES = F)
+data <- unlist(words)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+data <- str_replace_all(data, '[^[:alpha:]]', '') # 한영 제외 삭제, stringr library 사용
+data <- Filter(function(x) {nchar(x) >=2}, data)
+data <- gsub(' ', '', data)
+data <- gsub('"\n', '', data)
+
+write(unlist(data), 'data/seoul_2.txt') # remove space/crlf
+rev <- read.table('data/seoul_2.txt')
+nrow(rev) #3640 #3455 #3400
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+### 데이터 표현
+
+```{r wordcount, echo=FALSE}
+wordcount <- table(rev)
+wordcount
+head(sort(wordcount, decreasing = T), 30)
+
+palete <- brewer.pal(9, 'Set1')
+wordcloud(names(wordcount), freq=wordcount, scale=c(5,1), rot.per=0.25, min.freq=100,
+          random.order = F, random.color = T, colors = palete)
+legend(0.3, 1, '서울시 응답소 2015년 분석자료', cex=0.8, fill=NA, border=NA, bg='white',
+       text.col='red', text.font=2, box.col='red')
+
+```
+
