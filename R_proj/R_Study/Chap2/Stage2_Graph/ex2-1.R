@@ -52,6 +52,7 @@ install.packages('ggplot2')
 library(ggplot2)
 library(dplyr)
 df_top10 <- as.data.frame(top10)
+df_top10
 ggplot(df_top10, aes(x='', y=Freq, fill=rev)) + 
   geom_bar(width=1, stat='identity')
 ggplot(df_top10, aes(x='', y=Freq, fill=rev)) + 
@@ -73,3 +74,12 @@ ggplot(df_top10, aes(x='', y=Freq, fill=rev)) +
   coord_polar('y', start=0) +
   ggtitle('제주도 추천 여행코스 top 10') +
   geom_text(aes(y=ypos, label=ylabel), color='black')
+
+install.packages("plotrix")
+library(plotrix)
+th_pct <- round(bchart/sum(bchart) * 100,1)
+th_names <- names(bchart)
+th_labels <- paste(th_names,"\n","(",th_pct,")")
+
+pie3D(bchart,main="제주도 추천 여행 코스 Top 10",col=rainbow(10), 
+      cex=0.3,labels=th_labels,explode=0.05)
