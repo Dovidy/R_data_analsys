@@ -14,8 +14,7 @@ library(RColorBrewer)
 useSejongDic()
 
 # Read Data
-
-datas <- readLines('data/서울시 응답소_2015년전체/응답소_2015_01.txt')
+datas <- readLines('.data/서울시 응답소_2015년전체/응답소_2015_01.txt')
 
 i <- 1
 for(i in 2:12) {

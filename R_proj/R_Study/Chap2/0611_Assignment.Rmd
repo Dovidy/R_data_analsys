@@ -17,7 +17,6 @@ output: html_document
 ### 1. R Set Up
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setwd('C:\\SmartData\\R_data_analsys\\R_proj\\R_Study')
 library(rJava)
 library(KoNLP)
 library(wordcloud)
@@ -29,10 +28,11 @@ useSejongDic()
 ### 2. 데이터 입력
 
 ```{r datas}
-datas <- readLines('data/서울시 응답소_2015년전체/응답소_2015_01.txt')
+# getwd()
+datas <- readLines('../data/서울시 응답소_2015년전체/응답소_2015_01.txt')
 i <- 1
 for(i in 2:12) {
-  datas <- c(datas, readLines(sprintf('/data/서울시 응답소_2015년전체/응답소_2015_%02d.txt', i)))
+  datas <- c(datas, readLines(sprintf('../data/서울시 응답소_2015년전체/응답소_2015_%02d.txt', i)))
 }
 ```
 
@@ -42,14 +42,20 @@ for(i in 2:12) {
 words <- sapply(datas, extractNoun, USE.NAMES = F)
 data <- unlist(words)
 
+gsub_txt <- readLines('../data/gsub_data.txt')
+i <- 1
+for(i in 1:length(gsub_txt)) {
+  data <- gsub((gsub_txt[i]), '', data)
+}
+
 data <- str_replace_all(data, '[^[:alpha:]]', '') # 한영 제외 삭제, stringr library 사용
 data <- Filter(function(x) {nchar(x) >=2}, data)
 data <- gsub(' ', '', data)
 data <- gsub('"\n', '', data)
 
-write(unlist(data), 'data/seoul_2.txt') # remove space/crlf
-rev <- read.table('data/seoul_2.txt')
-nrow(rev) #3640 #3455 #3400
+write(unlist(data), '../data/seoul_2.txt') # remove space/crlf
+rev <- read.table('../data/seoul_2.txt')
+nrow(rev) #126933
 ```
 
 
@@ -57,7 +63,6 @@ nrow(rev) #3640 #3455 #3400
 
 ```{r wordcount, echo=FALSE}
 wordcount <- table(rev)
-wordcount
 head(sort(wordcount, decreasing = T), 30)
 
 palete <- brewer.pal(9, 'Set1')
